@@ -1,0 +1,15 @@
+
+/* html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
+ /* * body{
+  background: linear-gradient(145deg, #0a0a0a 0%, #1a1a1a 100%);
+} */
+
+@import "tailwindcss";
+/* :root {
+    font-family: Inter, sans-serif;
+    font-feature-settings: 'liga' 1, 'calt' 1; 
+  }
+  @supports (font-variation-settings: normal) {
+    :root { font-family: InterVariable, sans-serif; }
+  } */
