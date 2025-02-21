@@ -13,3 +13,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
   @supports (font-variation-settings: normal) {
     :root { font-family: InterVariable, sans-serif; }
   } */
+  .back{
+    background:  #121212 80%;
+  }
