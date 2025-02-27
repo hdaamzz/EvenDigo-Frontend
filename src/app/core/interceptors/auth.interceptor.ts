@@ -6,17 +6,17 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { AuthActions } from '../../core/store/auth/auth.actions';
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const store = inject(Store);
+// export const authInterceptor: HttpInterceptorFn = (req, next) => {
+//   const store = inject(Store);
   
-  return next(req).pipe(
-    catchError((error: HttpErrorResponse) => {
-      if (error.status === 401) {
-        store.dispatch(AuthActions.loginFailure({ 
-          error: 'Session expired or unauthorized' 
-        }));
-      }
-      return throwError(() => error);
-    })
-  );
-};
+//   return next(req).pipe(
+//     catchError((error: HttpErrorResponse) => {
+//       if (error.status === 401) {
+//         store.dispatch(AuthActions.loginFailure({ 
+//           error: 'Session expired or unauthorized' 
+//         }));
+//       }
+//       return throwError(() => error);
+//     })
+//   );
+// };

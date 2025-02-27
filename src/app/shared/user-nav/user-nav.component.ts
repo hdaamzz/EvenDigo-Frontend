@@ -8,6 +8,7 @@ import { takeUntil, map } from 'rxjs/operators';
 import { AuthState, User } from '../../core/models/userModel';
 import { AuthActions } from '../../core/store/auth/auth.actions';
 import { Router } from '@angular/router';
+import { GoogleAuthService } from '../../core/services/user/googleAuth/google-auth.service';
 interface AppState {
   auth: AuthState;
 }
@@ -30,14 +31,15 @@ export class UserNavComponent implements OnInit, OnDestroy {
   
   constructor(
     private store: Store<AppState>,
-    private router: Router
+    private router: Router,
+    private googleAuthService: GoogleAuthService
+
   ) {
     this.user$ = this.store.select(selectUser);
     this.isAuthenticated$ = this.store.select(selectIsAuthenticated);
   }
 
   ngOnInit(): void {
-    // Debug subscriptions
     this.user$
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -57,7 +59,12 @@ export class UserNavComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.store.dispatch(AuthActions.logout());
+    
+    
+    this.googleAuthService.logout();
+    
     this.isMobileMenuOpen = false;
+    this.isDropdownOpen = false;
   }
 
   navigateTo(path: string): void {

@@ -9,18 +9,23 @@ import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { AuthEffects } from './core/store/auth/auth.effects';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
-import { authInterceptor } from './core/interceptors/auth.interceptor';
+// import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { provideAuth, getAuth } from '@angular/fire/auth';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { environment } from './environments/environment';
+import Aura from '@primeng/themes/aura';
+import { providePrimeNG } from 'primeng/config';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideAnimationsAsync(), provideHttpClient(withInterceptors([authInterceptor])),
-  provideStore({ router: routerReducer, auth: authReducer }), provideEffects([AuthEffects]),provideRouterStore()
+  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideAnimationsAsync(), providePrimeNG({ theme: { preset: Aura } }), provideHttpClient(withInterceptors([])),
+  provideStore({ router: routerReducer, auth: authReducer }), provideEffects([AuthEffects]), provideRouterStore(), provideFirebaseApp(() => initializeApp(environment.firebase)), provideAuth(() => getAuth()),
   ]
 };
 
 Notiflix.Notify.init({
   position: 'right-top',
   distance: '10px',
-  opacity: 1, 
+  opacity: 1,
   borderRadius: '8px',
   timeout: 3000,
   messageMaxLength: 110,

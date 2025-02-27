@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { selectLoading } from '../../../core/store/auth/auth.selectors';
 import { AuthActions } from '../../../core/store/auth/auth.actions';
 import { Observable } from 'rxjs';
+import { GoogleAuthService } from '../../../core/services/user/googleAuth/google-auth.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,7 @@ export class LoginComponent {
   loading$: Observable<boolean>;
   constructor( 
     private fb:FormBuilder ,
-
+    private googleAuthService: GoogleAuthService,
     private store: Store
    ){
     this.initializeForms();
@@ -70,6 +71,9 @@ export class LoginComponent {
   }
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
+  }
+  loginWithGoogle() {
+    this.store.dispatch(AuthActions.googleLogin());
   }
   
 }

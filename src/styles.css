@@ -16,3 +16,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
   .back{
     background:  #121212 80%;
   }
+  .no-scrollbar {
+    -ms-overflow-style: none !important; /* IE and Edge */
+    scrollbar-width: none !important; /* Firefox */
+    overflow-y: scroll !important; /* Ensure scrolling is still possible */
+  }
+  
+  .no-scrollbar::-webkit-scrollbar {
+    display: none !important; /* Chrome, Safari */
+  }

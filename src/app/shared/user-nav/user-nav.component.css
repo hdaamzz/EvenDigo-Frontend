@@ -22,3 +22,6 @@
         color: #00ff66;
         transform: translateX(3px);
     }
+    .trans {
+        animation: slideDown 1s ease-out;
+    }

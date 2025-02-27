@@ -15,8 +15,11 @@ import { selectUser } from '../../../core/store/auth/auth.selectors';
 export class HomeComponent {
 
   constructor(
-
+    private store: Store
   ){
+    // this.store.select(selectUser).subscribe(user => {
+    //   console.log('Current User:', user);
+    // });
   }
 
   

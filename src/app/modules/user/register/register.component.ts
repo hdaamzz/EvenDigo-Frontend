@@ -8,6 +8,7 @@ import { alphabetsValidator ,emailValidator ,mobileNumberValidator,spacesValidat
 import { onlyNumbersValidator,passwordMatchValidator,passwordValidator,repeateCharacterValidator } from '../../../validators/formValidators';
 import { AuthService } from '../../../core/services/user/auth.service';
 import Notiflix from 'notiflix';  
+import { GoogleAuthService } from '../../../core/services/user/googleAuth/google-auth.service';
 
 @Component({
   selector: 'app-register',
@@ -21,13 +22,16 @@ export class RegisterComponent {
   isFormSubmited : boolean = false;
   showOtpForm: boolean = false;
   loading: boolean = false;
+  resendOtpTimer: number = 60;
+  resendOtpInterval: any;
+
 
 
 
   constructor(
      private fb:FormBuilder ,
      private authService:AuthService,
-     private router: Router
+     private router: Router,
   ){
       this.initializeForms();
     }
@@ -79,28 +83,29 @@ export class RegisterComponent {
     }
 
 
-    createAccount(){
+    createAccount() {
       if (!this.registerForm.valid) {
         this.registerForm.markAllAsTouched();
         return;
       }
-
-      this.loading=true;
-      const formData=this.registerForm.value;
-      
+    
+      this.loading = true;
+      const formData = this.registerForm.value;
+    
       this.authService.userRegister(formData).subscribe({
-        next:(response)=>{
-          this.loading=false
-          if(response.success){
+        next: (response) => {
+          this.loading = false;
+          if (response.success) {
             Notiflix.Notify.success('OTP sent successfully to your email');
-            this.showOtpForm=true;
-          }else{
-            Notiflix.Notify.failure(response.message || 'Failed to send otp')
+            this.showOtpForm = true;
+            this.startResendOtpTimer();
+          } else {
+            Notiflix.Notify.failure(response.message || 'Failed to send otp');
           }
         },
         error: (error) => {
           this.loading = false;
-          Notiflix.Notify.failure(error.error.message || 'Something went wrong')
+          Notiflix.Notify.failure(error.error.message || 'Something went wrong');
         }
       });
     }
@@ -132,9 +137,19 @@ export class RegisterComponent {
         }
       });
     }
+    startResendOtpTimer() {
+      this.resendOtpTimer = 60; 
+      this.resendOtpInterval = setInterval(() => {
+        if (this.resendOtpTimer > 0) {
+          this.resendOtpTimer--;
+        } else {
+          clearInterval(this.resendOtpInterval);
+        }
+      }, 1000);
+    }
   
     resendOTP() {
-      if (!this.showOtpForm) return;
+      if (!this.showOtpForm || this.resendOtpTimer > 0) return;
   
       this.loading = true;
       const formData = this.registerForm.value;
@@ -143,15 +158,16 @@ export class RegisterComponent {
         next: (response) => {
           this.loading = false;
           if (response.success) {
-            Notiflix.Notify.success( 'OTP resent successfully');
+            Notiflix.Notify.success('OTP resent successfully');
             this.otpForm.reset();
+            this.startResendOtpTimer(); 
           } else {
             Notiflix.Notify.failure(response.message || 'Failed to resend OTP');
           }
         },
         error: (error) => {
           this.loading = false;
-          Notiflix.Notify.failure(error.error.message ||'Failed to resend OTP');
+          Notiflix.Notify.failure(error.error.message || 'Failed to resend OTP');
         }
       });
     }
@@ -167,5 +183,6 @@ export class RegisterComponent {
     hasOtpError(errorName: string) {
       return this.otpForm.controls['otp'].hasError(errorName);
     }
+    
 
 }
