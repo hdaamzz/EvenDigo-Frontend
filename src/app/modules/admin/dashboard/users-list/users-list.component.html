@@ -14,7 +14,7 @@
           <thead>
             <tr>
               <th class="text-left py-3 text-gray-600 font-medium border-b-2 border-gray-200"></th>
-              <th class="text-left py-3 text-gray-600 font-medium border-b-2 border-gray-200">User Name</th>
+              <th class="text-left py-3 text-gray-600 font-medium border-b-2 border-gray-200">Name</th>
               <th class="text-left py-3 text-gray-600 font-medium border-b-2 border-gray-200">Email</th>
               <th class="text-left py-3 text-gray-600 font-medium border-b-2 border-gray-200">Phone</th>
               <th class="text-left py-3 text-gray-600 font-medium border-b-2 border-gray-200">Status</th>
@@ -46,13 +46,13 @@
               <td class="py-3 border-b border-gray-100">
                 @switch (user.status) {
                 @case ('active') {
-                <span class="status bg-green-100 text-green-600 px-2 py-1 rounded text-sm">Active</span>
+                <span class="status bg-green-100 text-green-600 px-2 py-1 rounded-3xl text-sm">Active</span>
                 }
                 @case ('deactive') {
-                <span class="status bg-yellow-100 text-yellow-600 px-2 py-1 rounded text-sm">Deactive</span>
+                <span class="status bg-yellow-100 text-yellow-600 px-2 py-1 rounded-3xl text-sm">Deactive</span>
                 }
                 @default {
-                <span class="status bg-red-100 text-red-600 px-2 py-1 rounded text-sm">Blocked</span>
+                <span class="status bg-red-100 text-red-600 px-2 py-1 rounded-3xl text-sm">Blocked</span>
                 }
                 }
               </td>
@@ -77,7 +77,7 @@
         <div class="text-center py-4">No users found</div>
         } @else {
         @for (user of usersList; track user._id) {
-        <div class="bg-white rounded-lg shadow-sm p-4 mb-4 border border-gray-100">
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-4 border border-gray-100 header transition-all">
           <div class="flex items-center mb-3">
             <div
               [class]="'w-12 h-12 rounded-full ' + getInitialColor(user.name) + ' flex items-center justify-center text-white mr-3'">
@@ -128,10 +128,10 @@
 
       <p-dialog header="User Details" [modal]="true" [(visible)]="visible" [position]="isMobile ? 'bottom' : 'right'"
         [style]="isMobile ? { width: '100%', maxWidth: '100vw', backgroundColor: 'white', color: 'black' } : 
-  { width: '30rem', backgroundColor: 'white', color: 'black' }" styleClass="white-dialog">
+  { width: '30rem', backgroundColor: 'white', color: 'black' }" styleClass="white-dialog ">
 
         <!-- Profile Section -->
-        <div class="mb-4">
+        <div class="mb-4 header">
 
           
 
@@ -164,7 +164,7 @@
         </div>
 
         <!-- Account Section -->
-        <div class="mb-6">
+        <div class="mb-6 stat-card">
           <h3 class="text-lg font-sans text-black  pb-2 mb-4">Account Information</h3>
 
           <div class="grid grid-cols-2 gap-x-4 gap-y-3">
@@ -192,7 +192,7 @@
 
             <div class="col-span-2 md:col-span-1">
               <span class="text-sm text-gray-500">Provider</span>
-              <p class="font-normal text-black">{{selectedUser.provider || 'N/A'}}</p>
+              <p class="font-normal text-black">{{selectedUser.provider || 'Default'}}</p>
             </div>
 
             <div class="col-span-2">
@@ -203,9 +203,19 @@
         </div>
 
         <!-- Footer Actions -->
-        <div class="flex justify-end gap-2">
-          <p-button label="Close" severity="secondary" (click)="hideDialog()" />
-        </div>
+         <div class="flex justify-end ">
+          <div class="mr-4">
+            @if (selectedUser.status=='active') {
+              <p-button label="Block" severity="danger" (click)="blockUser(selectedUser._id)" />
+            }@else {
+              <p-button label="Unlock" severity="success" (click)="unblockUser(selectedUser._id)" />
+            }
+          </div>
+          <div class="mr-4">
+            <p-button label="Close" severity="secondary" (click)="hideDialog()" />
+          </div>
+         </div>
+       
       </p-dialog>
 
 

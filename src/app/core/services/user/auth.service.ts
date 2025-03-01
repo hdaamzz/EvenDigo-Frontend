@@ -38,9 +38,17 @@ export class AuthService {
       })
     );
   }
-  checkAuthStatus(): Observable<{ isAuthenticated: boolean; user?: User; token?: string }> {
-    return this.http.get<{ isAuthenticated: boolean; user?: User; token?: string }>(
+  checkAuthStatus(): Observable<{isAuthenticated: boolean; user?: User; token?: string ,role?:string
+}> {
+    return this.http.get<{ isAuthenticated: boolean; user?: User; token?: string ,role?:string}>(
       `${this.baseUrl}user/auth/status`,
+      { withCredentials: true }
+    );
+  }
+
+  checkUserRole(): Observable<any> {
+    return this.http.get(
+      `${this.baseUrl}user/auth/role`,
       { withCredentials: true }
     );
   }

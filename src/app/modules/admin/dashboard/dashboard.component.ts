@@ -2,19 +2,22 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { DashboardHomeComponent } from './dashboard-home/dashboard-home.component';
 import { UsersListComponent } from "./users-list/users-list.component";
 import { CommonModule } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { AuthActions } from '../../../core/store/auth/auth.actions';
+import Notiflix from 'notiflix';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [DashboardHomeComponent, UsersListComponent,CommonModule],
+  imports: [DashboardHomeComponent, UsersListComponent, CommonModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent implements OnInit{
-  dashBoard:boolean=false;
-  userList:boolean=false;
+export class DashboardComponent implements OnInit {
+  dashBoard: boolean = false;
+  userList: boolean = false;
   sidebarOpen: boolean = false;
 
-  constructor(){}
+  constructor(private store: Store) { }
 
   ngOnInit(): void {
     this.showDashboard();
@@ -48,6 +51,10 @@ export class DashboardComponent implements OnInit{
       this.dashBoard = false;
       this.userList = true;
     }
+  }
+  logout(): void {
+    this.store.dispatch(AuthActions.logout());
+    Notiflix.Notify.success('Admin Logout Successfully')
   }
 
 }

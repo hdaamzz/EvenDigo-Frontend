@@ -51,4 +51,15 @@ export class AdminUsersService {
       })
     );
   }
+
+  blockUser(id:string):Observable<any>{
+    return this.http.patch(`${this.baseUrl}admin/users/block-user`,{id},{
+      withCredentials:true
+    });
+  }
+  unblockUser(id:string):Observable<any>{
+    return this.http.patch(`${this.baseUrl}admin/users/unblock-user`,{id},{
+      withCredentials:true
+    });
+  }
 }

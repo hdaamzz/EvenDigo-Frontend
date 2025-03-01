@@ -1,10 +1,9 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../../../services/user/auth.service';
-import { catchError, map } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { AuthService } from '../../services/user/auth.service';
+import { catchError, map, of } from 'rxjs';
 
-export const isLogged: CanActivateFn = (route, state) => {
+export const adminIsLogged: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const authService = inject(AuthService);
   console.log('Checking protected route access...');
@@ -14,25 +13,31 @@ export const isLogged: CanActivateFn = (route, state) => {
       console.log('Auth response in logged guard:', response);
       
       if (response.isAuthenticated) {
+        
+        if(response.role !== 'admin'){
+          console.log('Access not  granted to protected route');
+          router.navigate(['/']);
+          return false
+        }
         console.log('Access granted to protected route');
         return true;
       } else {
         console.log('No authentication, redirecting to login');
-        router.navigate(['/login']);
+        router.navigate(['/']);
         return false;
       }
     }),
     catchError(error => {
       console.error('Auth check error:', error);
       if (error.status === 401) {
-        router.navigate(['/login']);
+        router.navigate(['admin/login']);
       }
       return of(false);
     })
   );
 };
 
-export const isLogout: CanActivateFn = (route, state) => {
+export const adminIsLogout: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const authService = inject(AuthService);
   console.log('Checking auth status in guard...');
@@ -42,6 +47,7 @@ export const isLogout: CanActivateFn = (route, state) => {
       console.log('Auth response in logout guard:', response);
       
       if (response.isAuthenticated) {
+        
         console.log('User is authenticated, redirecting to home');
         router.navigate(['/']);
         return false;
